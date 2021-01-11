@@ -6,6 +6,7 @@ const Query = Matter.Query;
 const Bounds = Matter.Bounds;
 const SAT = Matter.SAT;
 
+//variables for man holding bow and arrow,target board object,arrows array and arrow objects 
 var man,manImg;
 var arrow,arrowImg;
 var bow,bowImg;
@@ -15,6 +16,8 @@ var arrows;
 var arrows=[];
 var gameState="onBow";
 
+
+//load images for backgroun, man
 function preload(){
     backgroundImg = loadImage("images/archery bacground3.jpg");
     manImg = loadImage("images/archery2.png");
@@ -28,19 +31,29 @@ function setup(){
     var canvas = createCanvas(windowWidth,windowHeight);
     engine = Engine.create();
     world = engine.world;
+
+    //a temporary gorund to place the arrows
     ground= new Ground(width/4,height-40,400,5);
+
+    //the target board
     board= new Board(width-400,height/2+100);
-    arr1= new Arrow(280,420,250,100);
+
+    //four arrow objects
+    arr1= new Arrow(265,350,250,100);
     arr2= new Arrow(380,740,250,100);
     arr3= new Arrow(380,740,250,100);
     arr4= new Arrow(380,740,250,100);
     
+
+    //pushing the arrows in reverse order into the array
      arrows.push(arr4);
      arrows.push(arr3);
      arrows.push(arr2);
      arrows.push(arr1);
 
-    bow= new Bow(arr1.body,{x:280,y:420})
+
+    //constraint to drag and release arrow from bow 
+    bow= new Bow(arr1.body,{x:265,y:350})
     //ground= createSprite(width/4,height-40,400,5);
 }
 
@@ -51,12 +64,21 @@ function setup(){
 function draw(){
     background(backgroundImg);
     Engine.update(engine);
+
+    
+
+
+  
+
+    //image of the man
+
+    image(manImg,100,height/2-100,200,400);
+
     ground.display();
     //image(archeryBoardImg,width-500,height/2-50,400,400);
-    image(manImg,100,height/2-100,200,400);
-    textSize(20);
-    fill("blue");
-    text(mouseX+","+mouseY,mouseX,mouseY);
+
+
+    
     
     board.display();
     arr1.display();
@@ -65,21 +87,25 @@ function draw(){
     arr4.display();
     bow.display();
 
-    detectCollision= Query.collides(board.body,arrows[arrows.length-1].body);
+   // detectCollision= Query.collides(board.body,arrows[arrows.length-1].body);
   
-    console.log(detectCollision);
+    //console.log(detectCollision);
 
     //console.log(arrows[arrows.length-1].body.velocity.x);
     // if( arrows[arrows.length-1].body.position.x>1000 && arrows[arrows.length-1].body.position.x<1330 ){
     //         Matter.Body.setStatic(arrows[arrows.length-1].body,true);
     // }
     //drawSprites();
+
+    textSize(20);
+    fill("blue");
+    text(mouseX+","+mouseY,mouseX,mouseY);
 }
 
 function mouseDragged(){
     if (gameState!=="launched"){
         Matter.Body.setPosition(arrows[arrows.length-1].body, {x: mouseX , y: mouseY});
-       Matter.Body.applyForce(arrows[arrows.length-1].body,arrows[arrows.length-1].body.position,{x:5,y:-5})
+      // Matter.Body.applyForce(arrows[arrows.length-1].body,arrows[arrows.length-1].body.position,{x:5,y:-5})
        return false;
     }
 }
@@ -95,7 +121,7 @@ function mouseReleased(){
 function keyPressed(){
     if(keyCode===32 && gameState==="launched"){
         if(arrows.length>=0){
-            Matter.Body.setPosition(arrows[arrows.length-1].body,{x:280,y:420})
+            Matter.Body.setPosition(arrows[arrows.length-1].body,{x:265,y:350})
             bow.attach(arrows[arrows.length-1].body);
             gameState = "onBow";
         }
@@ -109,7 +135,7 @@ function keyPressed(){
                              * @param {body[]} bodies
                              * @return {object[]} Collisions*/
                              
-                     Query.collides = function(body, bodies) {
+                     /*Query.collides = function(body, bodies) {
                                 var collisions = [];
                         
                                 for (var i = 0; i < bodies.length; i++) {
@@ -135,4 +161,4 @@ function keyPressed(){
                                 console.log(collisions);
 
                                 return collisions;
-             };
+             };*/
